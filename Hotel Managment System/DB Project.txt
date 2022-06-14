@@ -1,0 +1,172 @@
+// ** User Created ** //
+create user ibrahim
+  2  identified by abc;
+ // ** Access Granted ** //
+grant create session to ibrahim;
+ // ** Access Table Granted ** //
+grant create table to ibrahim;
+// ** View Access Granted ** //
+ grant create view to ibrahim;
+
+SQL> grant connect to ibrahim; 	
+// ** ** //
+grant create sequence to ibrahim;
+// ** Role Creation ** //
+create ROLE i;
+// ** Assignning role to Role ** //
+grant create table,create view to i;
+grant all privileges to ibrahim;
+
+
+grant create session,alter session,unlimited tablespace,
+  2  create table ,create view,
+  3  create procedure,create sequence ,create synonym,
+  4  create trigger,create type to ibrahim;
+
+
+
+
+
+
+
+
+
+
+
+// ** Hostel Tabel ** //
+ create Table Hostel(
+  2      hostel_id NUMBER(5) NOT NULL,
+  3      hostel_name VARCHAR (20) NOT NULL,
+  4      hostel_adress VARCHAR(20) NOT NULL,
+  5      hostel_owner VARCHAR(20) NOT NULL,
+  6      phone_no NUMBER(15) NOT NULL,
+  7      CONSTRAINT Hostel_hostel_id_pk PRIMARY KEY (hostel_id),
+  8      employee_id NUMBER(5) NOT NULL,
+  9      CONSTRAINT  employee_id_fk FOREIGN KEY (employee_id) REFERENCES  Employee(employee_id)
+ 10      );
+1)
+insert into Hostel values(1234,'Ibrahim_Hotel','GolraMor_Rwp','Hajji Rehman',03354878603,1234);
+insert into Hostel values(3235,'Al_Ain','GolraMor_Rwp','Zafar Iqbal',03354878323,1235);
+insert into Hostel values(3236,'Capital_Hostel','GolraMor_Rwp','Ghulam Shabbir',03354890903,1236);
+insert into Hostel values(3237,'Hajji_Camp','Saddar_RWP','Ghulam Raza',03135803165,1237);
+insert into Hostel values(3238,'Khan_Hostel','ISB','Mudassir',03482346701,1238);
+insert into Hostel values(3233,'Nakash_Hostel','LHR','Adnan',03328972380,1239);
+insert into Hostel values(3239,'raza_Hostel','ISB','Abrar',03014168893,1230);
+insert into Hostel values(3230,'Ali_Hostel','Peshawer','Rehman Khan',03128909677,1231);
+insert into Hostel values(3231,'Imran_Hostel','Jehlum','Kiyani',03089878709,1232);
+insert into Hostel values(3232,'Aakash_Hostel','ISB','Kaleem',03021281212,1233);
+
+
+ // ** Room Table ** //
+
+ create Table Room(
+  2  room_id NUMBER(5),
+  3  room_type varchar(10),
+  4  room_description varchar(20),
+  5  room_avaliable varchar(20),
+  6  CONSTRAINT Room_room_id_pk PRIMARY KEY (room_id),
+  7  hostel_id NUMBER(4) NOT NULL,
+  8  CONSTRAINT hostel_id_fk FOREIGN KEY (hostel_id) REFERENCES Hostel(hostel_id)
+  9  );
+
+insert into Room values(098,'Double_Bed','Yes',1234);
+insert into Room values(097,'Three_Bed','Yes',3235);
+insert into Room values(096,'Three','No',3236);
+insert into Room values(095,'Four_Bed','Yes',3237);
+insert into Room values(094,'Double_Bed','Yes',3238);
+insert into Room values(093,'Three_Bed','No',3233);
+insert into Room values(092,'Single_Bed','Yes',3239);
+insert into Room values(091,'Double_Bed','Yes',3230);
+insert into Room values(090,'Four_Bed','No',3231);
+insert into Room values(0912,'Four_Bed','No',3232);
+
+
+
+ create table Employee(
+   employee_id NUMBER(5) constraint pk primary key,
+   first_name VARCHAR(10) NOT NULL,
+   last_name VARCHAR(10) NOT NULL,
+   cnic NUMBER(15) NOT NULL,
+   phone_no NUMBER(12) NOT NULL  
+   );
+
+insert into Employee values(1234,'Ibrahim','Khan',373021190,0301121);
+insert into Employee values(1235,'Nakash','Haider',373021323,03032323);
+insert into Employee values(1236,'Muzamil','Ahsan',373023232,03323923);
+insert into Employee values(1237,'Ali','Malik',37302323323,0332393232);
+insert into Employee values(1238,'Kamran','Bhai',3730202182,0329102111);
+insert into Employee values(1239,'Saad','Raja',373092332,032913232);
+insert into Employee values(1230,'Shabaz','Ali',37303232,0329133232);
+insert into Employee values(1231,'Qadeer','Haq',37304454554,033232332);
+insert into Employee values(1232,'Imran','Ali',3730343232,033943433);
+insert into Employee values(1233,'Asad','Raza',37323203232,033032323);
+insert into Employee values(12332,'Mohsin','Raza',37323232,03309329323);
+
+
+
+// ** Student Table ** //
+ create table Student(
+  2  student_id NUMBER(5) CONSTRAINT student_id_pk PRIMARY KEY,
+  3  first_name VARCHAR(10) NOT NULL,
+  4  last_name VARCHAR(10) NOT NULL,
+  5  adress VARCHAR(20) NOT NULL,
+  6  cnic NUMBER(17) NOT NULL,
+  7  University VARCHAR(30) NOT NULL,
+  8  Phone_no NUMBER(11) NOT NULL
+  9  );
+insert into Student values(23184,'Daud','Raza','RWP',3730111609901,'Riphah University',03354878603);
+insert into Student values(23185,'Bilal','Gul','RWP',3730111608809,'Islamic University',03354878708);
+insert into Student values(23186,'Syed','Haroon','ISB',37301116082912,'Riphah University',03354821921);
+insert into Student values(23183,'Hamdan','Afzal','LHR',3730211098809,'CUST',03018199112);
+insert into Student values(23187,'Mohsin','Raza','PSW',3730211021212,'Riphah University',03014199001);
+insert into Student values(23188,'Asad','Raza','ISB',3730211123423,'Islamic University',03010323322);
+insert into Student values(23189,'Kumail','Raza','FSB',37302121291201,'FAST',03392120122);
+insert into Student values(23190,'Baqir','Raza','PDK',3730212120022,'LUMS',0339212212);
+insert into Student values(23191,'Rashid','Noor','Sialkot',37302121223,'Riphah University',0339212212);
+insert into Student values(23192,'Usama','Waheed','Chakwal',37302121212,'Riphah University',03392102121);
+insert into Student values(23193,'Afaaq','Aashiq','Gujrat',3730212212,'Islamic University',033921023232);
+insert into Student values(23194,'Talha','But','ISB',373021323902,'Riphah University',03392212120);
+
+
+
+// ** Complain Table ** //
+ create table Complain(
+  2  complain_id NUMBER(5) CONSTRAINT complain_id_pk PRIMARY KEY,
+  3  complain_register VARCHAR(50) NOT NULL,
+  4  student_id NUMBER(5) NOT NULL,
+  5  CONSTRAINT student_id_fk FOREIGN KEY (student_id) REFERENCES Student(student_id)
+  6  );
+
+insert into Complain values (5678,'Lock Problem',23184);
+insert into Complain values (5679,'Key lost Problem',23185);
+insert into Complain values (5670,'Mobile Phone stolen',23186);
+insert into Complain values (5671,'Water Coller Problem',23187);
+insert into Complain values (5672,'Fan not working',23188);
+insert into Complain values (5673,'Laundary Problem',23189);
+insert into Complain values (5674,'Mess Problem',23190);
+insert into Complain values (5675,'Key lost Problem',23191);
+insert into Complain values (5676,'Change Room',23192);
+insert into Complain values (5677,'Window is Not Opening',23193);
+insert into Complain values (5678,'Cell Phone Stolen',23194);
+
+
+// ** Reservation Table ** //
+create table Reservation(
+  2      reservation_id NUMBER(5) CONSTRAINT r_id_pk PRIMARY KEY,
+  3      No_Months NUMBER(5) NOT NULL,
+  4      student_id NUMBER(5) NOT NULL,
+  5      CONSTRAINT s_id_fk FOREIGN KEY (student_id) REFERENCES Student(student_id),
+  6      room_id NUMBER(5) NOT NULL,
+  7      CONSTRAINT R_id_fk FOREIGN KEY (room_id) REFERENCES Room(room_id)
+  8      );
+
+insert into Reservation values(3456,9,23184,098);
+insert  into Reservation values(3458,4,23185,097);
+insert  into Reservation values(3459,6,23186,096);
+insert  into Reservation values(3450,5,23187,095);
+insert  into Reservation values(3451,5,23188,094);
+insert  into Reservation values(3452,7,23189,093);
+insert  into Reservation values(3453,5,23190,092);
+insert  into Reservation values(3454,8,23191,091);
+insert  into Reservation values(3453,5,23192,090);
+
