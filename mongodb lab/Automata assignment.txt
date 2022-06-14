@@ -1,0 +1,86 @@
+#include<iostream>
+#include<string.h>
+#include<ctype.h>
+using namespace std;
+#define MAX 50
+
+class pda {
+private:
+    char data[MAX], str[MAX];
+    int top, length, count;
+
+    void pushData(char);
+    char popData();
+
+public:
+    pda() {
+        top = -1;
+        length = 0;
+        count = 0;
+    }
+    void getString();
+    void checkPalindrome();
+    void extractString();
+    void displayReverse();
+};
+
+void pda::getString() {
+    cout << "\n Enter a String: ";
+    cin.getline(str, MAX);
+
+    length = strlen(str);
+}
+
+
+
+void pda::checkPalindrome() {
+    for (int i = 0; i < length; i++)
+        pushData(str[i]);
+
+    for (int i = 0; i < length; i++) {
+        if (str[i] == popData())
+            count++;
+    }
+
+    if (count == length) {
+        cout << "\n Entered string is a Palindrome. \n";
+    }
+    else  cout << "\n Entered string is not a Palindrome. \n";
+}
+
+void pda::displayReverse() {
+    for (int i = length - 1; i >= 0; i--)
+        cout << str[i];
+}
+
+void pda::pushData(char temp) {
+
+    if (top == MAX - 1) {
+        cout << "\n Stack Overflow!!!";
+        return;
+    }
+
+    top++;
+    data[top] = temp;
+
+}
+
+char pda::popData() {
+    if (top == -1) {
+        cout << "\n Stack Underflow!!!";
+        char ch = '\n';
+        return ch;
+    }
+    char temp = data[top];
+    top--;
+    return temp;
+}
+int main() {
+    pda obj;
+    obj.getString();
+
+
+
+    obj.checkPalindrome();
+    return 0;
+}
