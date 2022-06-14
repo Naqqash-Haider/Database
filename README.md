@@ -1,2 +1,2 @@
 # Database
-I have done these Database project for helping the community.
+I have done these Database projects for helping the community.
