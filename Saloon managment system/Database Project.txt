@@ -1,0 +1,310 @@
+sys as sysdba
+
+///////
+
+
+create user Saloon_Management_Systemc identified by 123;
+
+           //////////GRANT  /////////
+
+Grant CREATE View TO Saloon_Management_Systemc;
+Grant CREATE Table TO Saloon_Management_Systemc;
+Grant CREATE Session TO Saloon_Management_Systemc;
+Grant CREATE Sequence TO Saloon_Management_Systemc;
+grant all privileges to Saloon_Management_Systemc;
+
+            ////// Connect //////
+
+//alter user Saloon_Management_Systemc quota 100m on system;
+
+connect Saloon_Management_Systemc;
+Enter Password: 123
+
+///////////// Create Table ////////////////
+
+CREATE TABLE Employee(
+Employee_id Number(4),
+Employee_Name varchar2(25) NOT NULL,
+Employee_Address varchar2(25) NOT NULL,
+Employee_Contact number(8)NOT NULL,
+Employee_Gender char(1) NOT NULL,
+Employee_Salary number(5) NOT NULL,
+Employee_Category varchar2(15) NOT NULL,
+Constraints EMPLOYEE_ID_PK PRIMARY KEY(Employee_id)
+);
+
+CREATE TABLE Product(
+Product_id Number(4),
+Product_Name varchar2(25) NOT NULL,
+Product_Quantity Number(3) NOT NULL,
+Product_Date Varchar2(10)NOT NULL,
+Employee_id Number(4),
+Constraints PRODUCT_ID_PK PRIMARY KEY(Product_id),
+Constraints EMPLOYEE_ID_FK FOREIGN KEY (Employee_id) REFERENCES Employee(Employee_id)
+);
+
+CREATE TABLE Stock(
+Stock_id Number(4),
+Employee_id Number(4),
+Product_id Number(4),
+Stock_Quantity Number(5) NOT NULL,
+Stock_Date Varchar2(10),
+Constraints STOCK_ID_PK PRIMARY KEY(Stock_id),
+Constraints EMP_ID_FK FOREIGN KEY (Employee_id) REFERENCES Employee(Employee_id),
+Constraints PRODUCT_ID_FK FOREIGN KEY (Product_id) REFERENCES Product(Product_id)
+);
+
+
+CREATE TABLE Customer(
+Customer_id Number(4),
+Customer_Name varchar2(20) NOT NULL,
+Customer_Gender varchar2(1) NOT NULL,
+Customer_Contact Number(11) NOT NULL,
+Employee_id Number(4),
+Constraints CUSTOMER_ID_PK PRIMARY KEY(Customer_id),
+Constraints EMPID_FK FOREIGN KEY (Employee_id) REFERENCES Employee(Employee_id)
+);
+
+CREATE TABLE Appointment(
+Appointment_id Number(4),
+Customer_id Number(4),
+App_Date varchar2(10) NOT NULL,
+App_Time varchar2(10) NOT NULL,
+Constraints APPOINTMENT_ID_PK PRIMARY KEY(Appointment_id),
+Constraints CUSTOMER_ID_FK FOREIGN KEY (Customer_id) REFERENCES Customer(Customer_id)
+);
+
+CREATE TABLE Payment(
+Payment_id Number(4),
+Payment_Amount number(6) NOT NULL,
+Payment_Date varchar2 (10) NOT NULL,
+Customer_id Number(4),
+Employee_id number(4),
+Constraints PAYMENT_ID_PK PRIMARY KEY(Payment_id),
+Constraints CUST_ID_FK FOREIGN KEY (Customer_id) REFERENCES Customer(Customer_id),
+Constraints EM_ID_FK FOREIGN KEY (Employee_id) REFERENCES Employee(Employee_id)
+);
+
+SQL> commit;
+
+ /////////////////// INSERT ////////////////
+
+                  // Employee //
+
+Insert into Employee(Employee_id,Employee_Name,Employee_Address,Employee_Contact,Employee_Gender,Employee_Salary,Employee_Category) 
+VALUES (01,'Nakash','House:13,g13,Islamabad','03219000','M',25000,'Receptionist');
+Insert into Employee(Employee_id,Employee_Name,Employee_Address,Employee_Contact,Employee_Gender,Employee_Salary,Employee_Category) 
+VALUES (02,'Haider','House:15,g12,Islamabad','03259988','M',30000,'Sales Manager');
+Insert into Employee(Employee_id,Employee_Name,Employee_Address,Employee_Contact,Employee_Gender,Employee_Salary,Employee_Category) 
+VALUES (03,'Eman','H#5,ChorChowk,Pindi','03212233','F',20000,'Worker');
+Insert into Employee(Employee_id,Employee_Name,Employee_Address,Employee_Contact,Employee_Gender,Employee_Salary,Employee_Category) 
+VALUES (04,'Mussa','H#10,ChandniChowk,Pindi','05311213','M',21000,'Worker');
+Insert into Employee(Employee_id,Employee_Name,Employee_Address,Employee_Contact,Employee_Gender,Employee_Salary,Employee_Category) 
+VALUES (05,'Rida','H#8,D-Chowk,Islo','088997799','F',22000,'Communitator');
+Insert into Employee(Employee_id,Employee_Name,Employee_Address,Employee_Contact,Employee_Gender,Employee_Salary,Employee_Category) 
+VALUES (06,'Tipu','H#19,G13/1,Islo','00212233','M',24000,'Worker');
+Insert into Employee(Employee_id,Employee_Name,Employee_Address,Employee_Contact,Employee_Gender,Employee_Salary,Employee_Category) 
+VALUES (07,'Shah','H#99,CliftonCenter,Pindi','09012903','M',20000,'Worker');
+Insert into Employee(Employee_id,Employee_Name,Employee_Address,Employee_Contact,Employee_Gender,Employee_Salary,Employee_Category) 
+VALUES (08,'Raza','H#2,CollegeRoad,Pindi','05216283','M',45000,'Manager');
+Insert into Employee(Employee_id,Employee_Name,Employee_Address,Employee_Contact,Employee_Gender,Employee_Salary,Employee_Category) 
+VALUES (09,'Blochi','H#5,ChoorChowk,Pindi','03212233','F',20000,'Worker');
+Insert into Employee(Employee_id,Employee_Name,Employee_Address,Employee_Contact,Employee_Gender,Employee_Salary,Employee_Category) 
+VALUES (10,'Naveed','H#09,ChorChowk,Pindi','01235793','M',30000,'Supervisior');
+
+               //  Product //
+
+Insert into Product(Product_id,Product_Name,Product_Quantity,Product_Date,Employee_id) 
+VALUES (001,'TenSalonSpa',25,'10-5-18',01);
+Insert into Product(Product_id,Product_Name,Product_Quantity,Product_Date,Employee_id) 
+VALUES (002,'DryTexturizingSpray',10,'11-2-19',02);
+Insert into Product(Product_id,Product_Name,Product_Quantity,Product_Date,Employee_id) 
+VALUES (003,'Hairstyling',13,'12-2-19',03);
+Insert into Product(Product_id,Product_Name,Product_Quantity,Product_Date,Employee_id) 
+VALUES (004,'CurlDefiningCream',15,'02-6-18',04);
+Insert into Product(Product_id,Product_Name,Product_Quantity,Product_Date,Employee_id) 
+VALUES (005,'KevinMurphyBlondeWash',25,'25-8-18',05);
+Insert into Product(Product_id,Product_Name,Product_Quantity,Product_Date,Employee_id) 
+VALUES (006,'RedkenHaircare',5,'12-4-19',06);
+Insert into Product(Product_id,Product_Name,Product_Quantity,Product_Date,Employee_id) 
+VALUES (007,'AvedaHaircare',8,'15-6-18',07);
+Insert into Product(Product_id,Product_Name,Product_Quantity,Product_Date,Employee_id) 
+VALUES (008,'RitaHazanTripleRemedy',9,'25-7-19',08);
+Insert into Product(Product_id,Product_Name,Product_Quantity,Product_Date,Employee_id) 
+VALUES (009,'OscarBlandiHeatSpray',15,'02-2-18',09);
+Insert into Product(Product_id,Product_Name,Product_Quantity,Product_Date,Employee_id) 
+VALUES (010,'KonxeptHairProducts',4,'13-4-18',10);
+
+               // Stock //
+
+Insert into Stock(Stock_id,Employee_id,Product_id,Stock_Quantity,Stock_Date) 
+VALUES (0100,01,005,100,'25-2-18');
+Insert into Stock(Stock_id,Employee_id,Product_id,Stock_Quantity,Stock_Date) 
+VALUES (0200,04,003,50,'08-1-18');
+Insert into Stock(Stock_id,Employee_id,Product_id,Stock_Quantity,Stock_Date) 
+VALUES (0300,02,010,20,'05-12-19');
+Insert into Stock(Stock_id,Employee_id,Product_id,Stock_Quantity,Stock_Date) 
+VALUES (0400,08,007,120,'31-8-17');
+Insert into Stock(Stock_id,Employee_id,Product_id,Stock_Quantity,Stock_Date) 
+VALUES (0500,05,001,30,'19-3-19');
+Insert into Stock(Stock_id,Employee_id,Product_id,Stock_Quantity,Stock_Date) 
+VALUES (0600,03,002,210,'23-7-19');
+Insert into Stock(Stock_id,Employee_id,Product_id,Stock_Quantity,Stock_Date) 
+VALUES (0700,06,008,100,'25-2-20');
+Insert into Stock(Stock_id,Employee_id,Product_id,Stock_Quantity,Stock_Date) 
+VALUES (0800,07,006,50,'15-1-20');
+Insert into Stock(Stock_id,Employee_id,Product_id,Stock_Quantity,Stock_Date) 
+VALUES (0900,09,004,10,'3-9-20');
+Insert into Stock(Stock_id,Employee_id,Product_id,Stock_Quantity,Stock_Date) 
+VALUES (1000,10,009,89,'8-7-20');
+
+               // Customer //
+
+Insert into Customer(Customer_id,Customer_Name,Customer_Gender,Customer_Contact,Employee_id) 
+VALUES (0010,'Shehnaz','F',03219876210,05);
+Insert into Customer(Customer_id,Customer_Name,Customer_Gender,Customer_Contact,Employee_id) 
+VALUES (0020,'Ghalib','M',03256326200,01);
+Insert into Customer(Customer_id,Customer_Name,Customer_Gender,Customer_Contact,Employee_id) 
+VALUES (0030,'Naqqash','M',03216853601,03);
+Insert into Customer(Customer_id,Customer_Name,Customer_Gender,Customer_Contact,Employee_id) 
+VALUES (0040,'Nimra','F',02214696000,04);
+Insert into Customer(Customer_id,Customer_Name,Customer_Gender,Customer_Contact,Employee_id) 
+VALUES (0050,'kashi','M',03210070010,02);
+Insert into Customer(Customer_id,Customer_Name,Customer_Gender,Customer_Contact,Employee_id) 
+VALUES (0060,'Majid','M',04619000210,07);
+Insert into Customer(Customer_id,Customer_Name,Customer_Gender,Customer_Contact,Employee_id) 
+VALUES (0070,'Zeeshan','M',03339876111,09);
+Insert into Customer(Customer_id,Customer_Name,Customer_Gender,Customer_Contact,Employee_id) 
+VALUES (0080,'Amir','M',03229446550,08);
+Insert into Customer(Customer_id,Customer_Name,Customer_Gender,Customer_Contact,Employee_id) 
+VALUES (0090,'Hania','F',03219996219,10);
+Insert into Customer(Customer_id,Customer_Name,Customer_Gender,Customer_Contact,Employee_id) 
+VALUES (0100,'Ammar','M',03999876000,06);
+           
+                     // Appointment //
+
+Insert into Appointment(Appointment_id,Customer_id,App_Date,App_Time) 
+VALUES (100,0080,'1-6-20','9:15am');
+Insert into Appointment(Appointment_id,Customer_id,App_Date,App_Time) 
+VALUES (200,0070,'5-10-20','10:00pm');
+Insert into Appointment(Appointment_id,Customer_id,App_Date,App_Time) 
+VALUES (300,0050,'5-8-20','5:30pm');
+Insert into Appointment(Appointment_id,Customer_id,App_Date,App_Time) 
+VALUES (400,0040,'28-2-20','12:15am');
+Insert into Appointment(Appointment_id,Customer_id,App_Date,App_Time) 
+VALUES (500,0060,'10-1-20','1:10pm');
+Insert into Appointment(Appointment_id,Customer_id,App_Date,App_Time) 
+VALUES (600,0090,'23-8-20','7:00pm');
+Insert into Appointment(Appointment_id,Customer_id,App_Date,App_Time) 
+VALUES (700,0020,'8-10-20','3:00pm');
+Insert into Appointment(Appointment_id,Customer_id,App_Date,App_Time) 
+VALUES (800,0030,'16-6-20','6:30am');
+Insert into Appointment(Appointment_id,Customer_id,App_Date,App_Time) 
+VALUES (900,0100,'10-3-20','2:00pm');
+Insert into Appointment(Appointment_id,Customer_id,App_Date,App_Time) 
+VALUES (1000,0010,'12-12-20','12:12pm');
+
+                      // Payment //
+
+Insert into Payment(Payment_id,Payment_Amount,Payment_Date,Customer_id,Employee_id) 
+VALUES (90,12000,'12-2-20',0030,10);
+Insert into Payment(Payment_id,Payment_Amount,Payment_Date,Customer_id,Employee_id) 
+VALUES (91,1000,'10-7-20',0020,07);
+Insert into Payment(Payment_id,Payment_Amount,Payment_Date,Customer_id,Employee_id) 
+VALUES (92,3000,'16-9-20',0050,06);
+Insert into Payment(Payment_id,Payment_Amount,Payment_Date,Customer_id,Employee_id) 
+VALUES (93,5000,'12-5-20',0060,08);
+Insert into Payment(Payment_id,Payment_Amount,Payment_Date,Customer_id,Employee_id) 
+VALUES (94,8000,'21-8-20',0070,04);
+Insert into Payment(Payment_id,Payment_Amount,Payment_Date,Customer_id,Employee_id) 
+VALUES (95,4000,'25-6-20',0040,09);
+Insert into Payment(Payment_id,Payment_Amount,Payment_Date,Customer_id,Employee_id) 
+VALUES (96,6000,'23-5-20',0010,05);
+Insert into Payment(Payment_id,Payment_Amount,Payment_Date,Customer_id,Employee_id) 
+VALUES (97,25000,'795-20',0100,03);
+Insert into Payment(Payment_id,Payment_Amount,Payment_Date,Customer_id,Employee_id) 
+VALUES (98,2000,'30-10-20',0080,01);
+Insert into Payment(Payment_id,Payment_Amount,Payment_Date,Customer_id,Employee_id) 
+VALUES (99,500,'20-1-21',0090,02);
+
+
+////////////////////////////////// UPDATE ///////////////////
+
+Update Employee set Employee_Address='F10,Islamabad' where Employee_id=01;
+Update Product set Product_Date='02-2-18' where Product_id=009;
+Update Payment set Payment_Amount=800 where Payment_id=99;
+
+///////////////////////DELETE /////////////////
+
+Delete from Stock where Stock_id=0800;
+
+//////////////// ///////////////////////
+
+Select Employee_id,Employee_Name,Employee_Salary,5*Employee_Salary as NEWSalary from Employee; 
+
+select distinct Product_Name from Product;             ///DISTINCT QUERY
+
+select distinct Employee_Salary from Employee;   
+ 
+Describe  Employees;   //Table Structure
+
+Select Employee_Name,Employee_Salary from Employee where Employee_Salary>20000;
+
+Select Employee_Name from Employee where Employee_Category='Worker';
+
+Select Employee_Name from Employee where Employee_Gender='F';
+
+
+Select Payment_id,Payment_Amount from Payment where Payment_Amount between 1000 and 6000;
+
+SELECT Employee_id,Employee_name,Employee_Salary from Employee where Employee_id in (01,05,10);
+
+SELECT Customer_id,Customer_Name from Customer where Customer_Name like 'S%';   // '_a%'   '%h%'
+
+
+Select Employee_Name,Employee_Salary from Employee where Employee_Salary=20000 and Employee_Category='Worker';  //AND  //OR 
+
+Select Customer_id,Customer_Name from Customer where customer_Gender not in('M');  //NOT
+
+Select Appointment_id,App_Date from Appointment order by App_Date; //Default asc   ///asc  /desc
+
+Select concat(Customer_id,Customer_Name),length(Customer_Name),instr(Customer_Name,'n') from Customer where Customer_id=0010;
+
+Select lpad(Payment_Amount,10,'*') from Payment; //LPAD /RPAD
+
+Select  Employee_Salary,MOD(Employee_Salary,210) from employee where Employee_Category='Worker';
+
+Select sysdate from dual;  //DATE
+
+SELECT AVG (Employee_Salary), MAX(Employee_Salary), MIN(Employee_Salary), SUM(Employee_Salary),COUNT(Employee_id) FROM Employee;  //Group Functions
+
+select avg(Payment_Amount) from Payment group by Customer_id,Employee_id;
+
+SELECT max(Payment_Amount) FROM Payment GROUP BY Employee_id HAVING max(Payment_Amount)>3000;
+
+select Min(Payment_Amount) from Payment where Payment_Amount>(Select min(Payment_Amount) from Payment);  //2ndlowest amount
+
+Select e.Employee_id,e.Employee_Name, p.Product_Name from Employee e JOIN Product p on (e.Employee_id=p.Product_id);  Simple Join
+
+Select a.Appointment_id,a.App_Date,a.App_Time,c.Customer_id,c.Customer_Name from Appointment a LEFT OUTER JOIN Customer c on (a.Appointment_id=c.Customer_id);  //LEFT OUTER JOIN  //RIGHT OUTER JOIN
+
+select c.Customer_id,c.Customer_Name,m.Employee_id, m.Customer_Gender,m.Customer_Contact from Customer c join Customer m on(c.Customer_id=m.Employee_id);  //Self JOIN
+
+select max(Employee_Salary)- min(Employee_Salary) as Difference from Employee;
+
+SELECT Employee_Name, Customer_Name FROM Employee CROSS JOIN Customer;
+
+Delete from Appointment where Appointment_id=100;  //Delete //roll back
+
+Truncate Appointment; 
+
+Alter table Employee Add Employee_Email varchar2(25);    //Alter ADD  //Drop
+
+
+///ALTER TABLE Employee ALTER COLUMN Employee_Name varchar2(40);  //Modify
+
+DROP table Employee cascade Constraints;   //Drop table without effecting other tables where employee_id acts as Foreign_Key
+
+
+
+
