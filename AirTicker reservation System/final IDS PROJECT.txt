@@ -1,0 +1,422 @@
+
+SQL> Create user AirLineTicket identified by 1234;
+
+User created.
+
+SQL> Grant CREATE View TO AirLineTicket;
+
+Grant succeeded.
+
+SQL> Grant CREATE Table TO AirLineTicket;
+
+Grant succeeded.
+
+SQL> Grant CREATE Session TO AirLineTicket;
+
+Grant succeeded.
+
+SQL> Grant CREATE Sequence TO AirLineTicket;
+
+Grant succeeded.
+SQL> connect AirLineTicket
+Enter password:1234
+Connected.
+
+SQL> alter user AirLineTicket quota 50m on system;
+User altered.
+
+
+---------------------------------------- Table Created -------------------------------------------------
+--------------------------------------------------------------------------------------------------------
+SQL> CREATE TABLE AIRLINE(A_ID Number(8),A_NAME VARCHAR2(28) NOT NULL,
+  2  Constraints AIRLINE_A_ID_pk PRIMARY KEY(A_ID),
+  3  Constraints AIRLINE_A_NAME_uk UNIQUE(A_NAME));
+
+Table created.
+
+SQL> CREATE TABLE FLIGHT(F_ID NUMBER (8),F_SHIFT varchar2(20) NOT NULL,A_ID Number (7) NOT NULL,R_ID NUmber (8) NOT NULL,
+  2  Constraints FLIGHT_F_ID_pk PRIMARY KEY(F_ID),
+  3  Constraints A_ID_fk FOREIGN KEY (A_ID) REFERENCES AIRLINE(A_ID),
+  4  Constraints R_ID_fk FOREIGN KEY (R_ID) REFERENCES ROUTE(R_ID));
+
+Table created.
+ 
+SQL> CREATE TABLE ROUTE (R_ID NUMBER (8),R_DEPARTURE VARCHAR2(50) NOT NULL, R_ARRIVAL VARCHAR2(50) NOT NULL,
+  2  Constraints ROUTE_R_ID_pk PRIMARY KEY(R_ID));
+
+Table created.
+
+
+SQL> CREATE TABLE TICKET(T_ID Number(8), T_FARES NUMBER(9) NOT NULL, Seat_NO NUMBER (8) NOT NULL , T_CATEGORY VARCHAR2(20) NOT NULL ,T_DATE VARCHAR2(20) NOT NULL,F_ID NUMBER (8) NOT NULL ,
+  2  Constraints TICKET_T_ID_pk PRIMARY KEY(T_ID),
+  3  Constraints F_ID_fk FOREIGN KEY (F_ID) REFERENCES FLIGHT(F_ID));
+
+Table created.
+
+SQL> CREATE TABLE PASSENGERS(P_ID NUMBER(8), P_NAME VARCHAR2(28) NOT NULL, P_CNIC NUMBER (15) NOT NULL,P_Contact_NO Number (15) NOT NULL, P_Age Number (5) NOT NULL, P_GENDER VARCHAR2(20) NOT NULL, P_STATE VARCHAR2(20) NOT NULL, P_Passport_No VARCHAR2(20) NOT NULL ,F_ID NUmber (8) NOT NULL , T_ID NUMBER (8) NOT NULL,
+  2  Constraints PASSENGERS_P_ID_pk PRIMARY KEY(P_ID),
+  3  Constraints T_ID_fk FOREIGN KEY (T_ID) REFERENCES TICKET(T_ID));
+
+Table created.
+
+SQL> ALTER TABLE PASSENGERS
+  2  ADD CONSTRAINT T_ID_uk UNIQUE(T_ID);
+
+Table altered.
+SQL> ALTER TABLE PASSENGERS
+  2  ADD CONSTRAINT P_CNIC_uk UNIQUE(P_CNIC);
+
+Table altered.
+commit
+SQL> ALTER TABLE PASSENGERS
+  2  ADD CONSTRAINT P_PASSPORT_NO_uk UNIQUE(P_PASSPORT_NO);
+
+Table altered.
+
+------------------------------------------ DESCRIBE ---------------------------------------------------
+-------------------------------------------------------------------------------------------------------
+
+SQL> describe Airline;
+ Name                                      Null?    Type
+ ----------------------------------------- -------- ----------------------------
+ A_ID                                      NOT NULL NUMBER(8)
+ A_NAME                                    NOT NULL VARCHAR2(28)
+
+SQL> describe Ticket;
+ Name                                      Null?    Type
+ ----------------------------------------- -------- ----------------------------
+ T_ID                                      NOT NULL NUMBER(8)
+ T_FARES                                   NOT NULL NUMBER(9)
+ SEAT_NO                                   NOT NULL NUMBER(8)
+ T_CATEGORY                                NOT NULL VARCHAR2(20)
+ T_DATE                                    NOT NULL VARCHAR2(20)
+ F_ID                                      NOT NULL NUMBER(8)
+
+SQL> describe Flight;
+ Name                                      Null?    Type
+ ----------------------------------------- -------- ----------------------------
+ F_ID                                      NOT NULL NUMBER(8)
+ F_SHIFT                                   NOT NULL VARCHAR2(20)
+ A_ID                                      NOT NULL NUMBER(7)
+ R_ID                                      NOT NULL NUMBER(8)
+
+SQL> describe Passengers;
+ Name                                      Null?    Type
+ ----------------------------------------- -------- ----------------------------
+ P_ID                                      NOT NULL NUMBER(8)
+ P_NAME                                    NOT NULL VARCHAR2(28)
+ P_CNIC                                    NOT NULL NUMBER(15)
+ P_CONTACT_NO                              NOT NULL NUMBER(15)
+ P_AGE                                     NOT NULL NUMBER(5)
+ P_GENDER                                  NOT NULL VARCHAR2(20)
+ P_STATE                                   NOT NULL VARCHAR2(20)
+ P_PASSPORT_NO                             NOT NULL VARCHAR2(20)
+ F_ID                                      NOT NULL NUMBER(8)
+ T_ID                                      NOT NULL NUMBER(8)
+
+SQL> describe Route;
+ Name                                      Null?    Type
+ ----------------------------------------- -------- ----------------------------
+ R_ID                                      NOT NULL NUMBER(8)
+ R_DEPARTURE                               NOT NULL VARCHAR2(50)
+ R_ARRIVAL                                 NOT NULL VARCHAR2(50)
+
+
+-------------------------------------- Tab -------------------------------------------------------------
+SQL> select * from tab;
+
+TNAME                          TABTYPE  CLUSTERID
+------------------------------ ------- ----------
+AIRLINE                        TABLE
+FLIGHT                         TABLE
+PASSENGERS                     TABLE
+ROUTE                          TABLE
+TICKET                         TABLE
+
+--------------------------------------- Record Insert --------------------------------------------------
+--------------------------------------------------------------------------------------------------------
+
+------------------------------ Air Line Insert
+
+SQL> INSERT INTO AIRLINE(A_ID,A_NAME)
+  2  VALUES (1,'TURKEY');
+
+1 row created.
+
+SQL> INSERT INTO AIRLINE(A_ID,A_NAME)
+  2  VALUES (2,'PIA');
+
+1 row created.
+
+SQL> INSERT INTO AIRLINE(A_ID,A_NAME)
+  2  VALUES (3,'EMRIATES');
+
+1 row created.
+
+SQL> INSERT ALL
+  2  INTO AIRLINE (A_ID,A_NAME) VALUES (4,'Saudi')
+  3  INTO AIRLINE (A_ID,A_NAME) VALUES (5,'Air Blue')
+  4  INTO AIRLINE (A_ID,A_NAME) VALUES (6,'Shaheen')
+  5  SELECT * FROM dual;
+
+3 rows created.
+
+SQL> select * from AIRLINE;
+
+      A_ID A_NAME
+---------- ----------------------------
+         2 PIA
+         4 Saudi
+         5 Air Blue
+         6 Shaheen
+         1 TURKEY
+         3 EMRIATES
+
+6 rows selected.
+
+-------------------------------------- Flight Insert
+
+SQL> INSERT INTO FLIGHT (F_ID,F_SHIFT,A_ID,R_ID)
+  2  VALUES(1,'NIGHT',2,1);
+
+1 row created.
+
+SQL> INSERT ALL
+  2  INTO FLIGHT(F_ID,F_SHIFT,A_ID,R_ID) VALUES(2,'DAY',2,6)
+  3  INTO FLIGHT(F_ID,F_SHIFT,A_ID,R_ID) VALUES(3,'DAY',2,8)
+  4  INTO FLIGHT(F_ID,F_SHIFT,A_ID,R_ID) VALUES(4,'NIGHT',3,5)
+  5  INTO FLIGHT(F_ID,F_SHIFT,A_ID,R_ID) VALUES(5,'NIGHT',3,4)
+  6  INTO FLIGHT(F_ID,F_SHIFT,A_ID,R_ID) VALUES(6,'DAY',3,1)
+  7  Select * from dual;
+
+5 rows created.
+
+SQL> select * from flight;
+
+      F_ID F_SHIFT                    A_ID       R_ID
+---------- -------------------- ---------- ----------
+         2 DAY                           2          6
+         3 DAY                           2          8
+         4 NIGHT                         3          5
+         5 NIGHT                         3          4
+         6 DAY                           3          1
+         1 NIGHT                         2          1
+
+6 rows selected.
+
+-------------------------------------- Route Insert
+SQL> INSERT INTO ROUTE(R_ID,R_DEPARTURE,R_ARRIVAL)
+  2  VALUES(1,'ISLAMABAD','JEDDAH');
+
+1 row created.
+
+
+SQL> INSERT ALL
+  2     INTO Route (R_ID,R_DEPARTURE,R_ARRIVAL) VALUES (2,'ISLAMABAD','LAHORE')
+  3  INTO Route (R_ID,R_DEPARTURE,R_ARRIVAL) VALUES (3,'ISLAMABAD','KARACHI')
+  4  INTO Route (R_ID,R_DEPARTURE,R_ARRIVAL) VALUES (4,'SHARJA','KARACHI')
+  5  INTO Route (R_ID,R_DEPARTURE,R_ARRIVAL) VALUES (5,'DUBAI','KARACHI')
+  6  select * from dual;
+
+4 rows created.
+
+SQL> INSERT ALL
+  2  INTO ROUTE(R_ID,R_DEPARTURE,R_ARRIVAL) VALUES (6,'LAHORE','SIALKOT')
+  3  INTO ROUTE(R_ID,R_DEPARTURE,R_ARRIVAL) VALUES (7,'DUBAI','LAHORE')
+  4  INTO ROUTE(R_ID,R_DEPARTURE,R_ARRIVAL) VALUES (8,'KARACHI','LAHORE')
+  5  INTO ROUTE(R_ID,R_DEPARTURE,R_ARRIVAL) VALUES (9,'KARACHI','MAKKAH')
+  6  INTO ROUTE(R_ID,R_DEPARTURE,R_ARRIVAL) VALUES (10,'KARACHI','MADINA')
+  7  INTO ROUTE(R_ID,R_DEPARTURE,R_ARRIVAL) VALUES (11,'MAKKAH','MADINA')
+  8  select * from dual;
+
+6 rows created.
+
+SQL> select * from route;
+
+      R_ID R_DEPARTURE  R_ARRIVAL
+---------- -----------  -----------
+         6 LAHORE       SIALKOT
+
+         7 DUBAI        LAHORE
+
+         8 KARACHI      LAHORE
+
+         9 KARACHI      MAKKAH
+
+        10 KARACHI      MADINA
+
+        11 MAKKAH       MADINA
+
+        2 ISLAMABAD     LAHORE
+
+        3 ISLAMABAD     KARACHI
+  
+        4 SHARJA        KARACHI
+
+        5 DUBAI         KARACHI
+
+        1 ISLAMABAD     JEDDAH
+
+
+11 rows selected.
+
+--------------------------------------- Ticket Insert
+SQL> INSERT INTO TICKET(T_ID,T_FARES,SEAT_NO,T_CATEGORY,T_DATE,F_ID)
+  2  VALUES (1,20000,1,'BUSINESS CLASS','5/27/19',1);
+
+1 row created.
+
+SQL> INSERT INTO TICKET(T_ID,T_FARES,SEAT_NO,T_CATEGORY,T_DATE,F_ID)
+  2  VALUES (2,20000,2,'BUSINESS CLASS','5/27/19',1);
+
+1 row created.
+
+SQL> INSERT ALL
+  2  INTO TICKET(T_ID,T_FARES,SEAT_NO,T_CATEGORY,T_DATE,F_ID) VALUES(3,50000,21,'ECNOMY CLASS','6/7/2019',2)
+  3  INTO TICKET(T_ID,T_FARES,SEAT_NO,T_CATEGORY,T_DATE,F_ID) VALUES(4,75000,20,'BUSINESS CLASS','7/7/2019',2)
+  4  select * from dual;
+
+2 rows created.
+
+SQL> INSERT ALL
+  2  INTO TICKET(T_ID,T_FARES,SEAT_NO,T_CATEGORY,T_DATE,F_ID) VALUES (5,40000,15,'BUSINESS CLASS','2/3/2019',1)
+  3  INTO TICKET(T_ID,T_FARES,SEAT_NO,T_CATEGORY,T_DATE,F_ID) VALUES (6,41000,14,'BUSINESS CLASS','3/3/2019',1)
+  4  INTO TICKET(T_ID,T_FARES,SEAT_NO,T_CATEGORY,T_DATE,F_ID) VALUES (7,45000,16,'BUSINESS CLASS','5/3/2019',1)
+  5  select * from dual;
+
+3 rows created.
+
+SQL> INSERT ALL
+  2  INTO TICKET(T_ID,T_FARES,SEAT_NO,T_CATEGORY,T_DATE,F_ID) VALUES (8,40000,25,'ECNOMY CLASS','5/3/2019',1)
+  3  INTO TICKET(T_ID,T_FARES,SEAT_NO,T_CATEGORY,T_DATE,F_ID) VALUES (9,40000,28,'ECNOMY CLASS','6/4/2019',1)
+  4  INTO TICKET(T_ID,T_FARES,SEAT_NO,T_CATEGORY,T_DATE,F_ID) VALUES (10,40000,29,'ECNOMY CLASS','6/4/2019',1)
+  5  INTO TICKET(T_ID,T_FARES,SEAT_NO,T_CATEGORY,T_DATE,F_ID) VALUES (11,40000,22,'ECNOMY CLASS','6/4/2019',1)
+  6  INTO TICKET(T_ID,T_FARES,SEAT_NO,T_CATEGORY,T_DATE,F_ID) VALUES (12,55000,10,'BUSINESS CLASS','6/4/2019',1)
+  7  select * from dual;
+
+5 rows created.
+--------------------------------------- Passengers Insert
+SQL> INSERT INTO PASSENGERS(P_ID,P_NAME,P_CNIC,P_CONTACT_NO,P_AGE,P_GENDER,P_STATE,P_PASSPORT_NO,F_ID,T_ID)
+  2  VALUES(1,'HAMMAD',3740512345678,03151234567,21,'MALE','PAKISTAN','pk 17376320360432',1,1);
+
+1 row created.
+
+SQL> INSERT INTO PASSENGERS(P_ID,P_NAME,P_CNIC,P_CONTACT_NO,P_AGE,P_GENDER,P_STATE,P_PASSPORT_NO,F_ID,T_ID)
+  2  VALUES(2,'HASSAN',03345345431,34532253242113,22,'MALE','PAKISTAN','pk 3453245560432',1,2);
+
+1 row created.
+
+SQL> INSERT INTO PASSENGERS(P_ID,P_NAME,P_CNIC,P_CONTACT_NO,P_AGE,P_GENDER,P_STATE,P_PASSPORT_NO,F_ID,T_ID)
+  2  VALUES(3,'AHMED_UL_HABIB',7653434523524,023424252531,34,'MALE','SAUDI ARAB',' SA 56546465536222O',1,3);
+
+1 row created.
+
+SQL> INSERT ALL
+  2  INTO PASSENGERS(P_ID,P_NAME,P_CNIC,P_CONTACT_NO,P_AGE,P_GENDER,P_STATE,P_PASSPORT_NO,F_ID,T_ID) VALUES (5,'MAHNOOR',4353425546546,4354355645466,48,'FEMALE','PAKISTAN',' PK 5426546545454',1,5)
+  3  INTO PASSENGERS(P_ID,P_NAME,P_CNIC,P_CONTACT_NO,P_AGE,P_GENDER,P_STATE,P_PASSPORT_NO,F_ID,T_ID) VALUES (4,'LIBA',4533422352324,023424252531,24,'FEMALE','PAKISTAN',' PK 3434232524355',1,4)
+  4  select * from dual;
+
+2 rows created.
+
+
+SQL> INSERT ALL
+  2  INTO PASSENGERS(P_ID,P_NAME,P_CNIC,P_CONTACT_NO,P_AGE,P_GENDER,P_STATE,P_PASSPORT_NO,F_ID,T_ID) VALUES (6,'BAHIR',3453454354355,4023343425251,56,'MALE','UAE',' UAE 432543543543',1,6)
+  3  INTO PASSENGERS(P_ID,P_NAME,P_CNIC,P_CONTACT_NO,P_AGE,P_GENDER,P_STATE,P_PASSPORT_NO,F_ID,T_ID) VALUES (7,'MAJID',8346342784325,0233434252531,36,'MALE','UAE',' UAE 433443524355',1,7)
+  4  select * from dual;
+
+2 rows created.
+SQL> INSERT ALL
+  2  INTO PASSENGERS(P_ID,P_NAME,P_CNIC,P_CONTACT_NO,P_AGE,P_GENDER,P_STATE,P_PASSPORT_NO,F_ID,T_ID) VALUES (8,'BAHIR',4325234553455,435465433656,76,'MALE','UAE',' UAE 4325443543543',1,8)
+  3  INTO PASSENGERS(P_ID,P_NAME,P_CNIC,P_CONTACT_NO,P_AGE,P_GENDER,P_STATE,P_PASSPORT_NO,F_ID,T_ID) VALUES (9,'JAMAL',5485234553455,452555433656,29,'MALE','PAKISTAN',' PK 4325443543543',1,9)
+  4  select * from dual;
+
+2 rows created.
+
+SQL> INSERT INTO PASSENGERS(P_ID,P_NAME,P_CNIC,P_CONTACT_NO,P_AGE,P_GENDER,P_STATE,P_PASSPORT_NO,F_ID,T_ID)
+  2  VALUES (10,'ARSAL',03365826364,3740515575655,30,'MALE','AUSTRAILLA','AS 67667876876',1,10);
+
+1 row created.
+
+SQL> INSERT INTO PASSENGERS(P_ID,P_NAME,P_CNIC,P_CONTACT_NO,P_AGE,P_GENDER,P_STATE,P_PASSPORT_NO,F_ID,T_ID)
+  2      VALUES (11,'yaseen',03365826365,3740515575699,29,'MALE','canda','C 67667876876',2,11);
+
+1 row created.
+
+SQL>  INSERT INTO PASSENGERS(P_ID,P_NAME,P_CNIC,P_CONTACT_NO,P_AGE,P_GENDER,P_STATE,P_PASSPORT_NO,F_ID,T_ID)
+  2     VALUES (12,'Alia',033657465465,73573554343,24,'female','America','A 67667876874',2,12);
+
+1 row created.
+
+
+
+------------------------- UPDATE ---------------------------
+SQL> update ticket set SEAT_NO=21 where T_ID=3;
+  
+1 row updated.
+
+
+----------------------------- Arithmetic expressions --------------
+
+SQL> select T_ID,SEAT_NO,T_FARES,(T_FARES+10000) AS TAX from TICKET;
+
+      T_ID    SEAT_NO    T_FARES        TAX
+---------- ---------- ---------- ----------
+         3         21      50000      60000
+         4         20      75000      85000
+         2          2      20000      30000
+         1          1      20000      30000
+
+SQL> select T_ID,SEAT_NO,T_FARES,(1000) AS TAX,(T_FARES+10000) AS TOTAL_FARES from TICKET;
+
+      T_ID    SEAT_NO    T_FARES        TAX TOTAL_FARES
+---------- ---------- ---------- ---------- -----------
+         3         21      50000       1000       60000
+         4         20      75000       1000       85000
+         2          2      20000       1000       30000
+         1          1      20000       1000       30000
+
+--------------------------------- DISTINCT ---------------------------
+ select DISTINCT T_ID from Ticket;
+SQL> select P_name from passengers;
+
+P_NAME
+----------------------------
+HAMMAD
+AHMED_UL_HABIB
+MAHNOOR
+LIBA
+BAHIR
+MAJID
+BAHIR
+JAMAL
+HASSAN
+ARSAL
+yaseen
+
+P_NAME
+----------------------------
+Alia
+
+12 rows selected.
+
+SQL> select distinct (P_name) from passengers;
+
+P_NAME
+----------------------------
+HAMMAD
+AHMED_UL_HABIB
+MAJID
+yaseen
+JAMAL
+MAHNOOR
+HASSAN
+ARSAL
+Alia
+LIBA
+BAHIR
+
+11 rows selected.
+
+
+
+
